@@ -5,6 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UserRepository } from './user.repository';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { JwtPayload } from './jwt-payload.interface';
+import { UserResponseDto } from './dto/user-response.dto';
 
 @Injectable()
 export class AuthService {
@@ -15,8 +16,9 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) { }
 
-  async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
-    await this.userRepository.signUp(authCredentialsDto)
+  async signUp(authCredentialsDto: AuthCredentialsDto): Promise<UserResponseDto> {
+    const user = await this.userRepository.signUp(authCredentialsDto)
+    return user.toResponseObject()
   }
 
   async signIn(authCredentialsDto: AuthCredentialsDto): Promise<{ accessToken: string }> {

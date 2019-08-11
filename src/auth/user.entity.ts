@@ -1,4 +1,4 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, Unique, OneToMany } from "typeorm";
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, Unique, OneToMany, CreateDateColumn } from "typeorm";
 import * as bcrypt from "bcrypt";
 import { Task } from "src/tasks/task.entity";
 
@@ -8,6 +8,9 @@ export class User extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number
+
+  @CreateDateColumn()
+  created: Date
 
   @Column()
   username: string
@@ -26,4 +29,8 @@ export class User extends BaseEntity {
     return hash === this.password
   }
 
+  toResponseObject() {
+    const { id, created, username } = this
+    return { id, created, username }
+  }
 }
